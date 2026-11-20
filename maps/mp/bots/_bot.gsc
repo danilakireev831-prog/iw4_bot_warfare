@@ -1245,7 +1245,8 @@ onGrenadeFire()
 		}
 		else if ( issubstr( weaponName, "frag_" ) )
 		{
-			grenade thread AddToFragList( self );
+			grenade.bot_owner = self;
+			grenade thread AddToFragList();
 		}
 	}
 }
@@ -1253,14 +1254,14 @@ onGrenadeFire()
 /*
 	Adds a frag grenade to the list of all frags
 */
-AddToFragList( who )
+AddToFragList()
 {
 	grenade = spawnstruct();
 	grenade.origin = self getorigin();
 	grenade.velocity = ( 0, 0, 0 );
 	grenade.grenade = self;
-	grenade.owner = who;
-	grenade.team = who.team;
+	grenade.owner = self.bot_owner;
+	grenade.team = self.bot_owner.team;
 	grenade.throwback = undefined;
 	
 	grenade thread thinkFrag();
