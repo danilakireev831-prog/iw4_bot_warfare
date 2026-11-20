@@ -778,12 +778,17 @@ add_bot()
 {
 	bot = addtestclient();
 	
-	if ( isdefined( bot ) )
+	if ( !isdefined( bot ) )
 	{
-		bot.pers[ "isBot" ] = true;
-		bot.pers[ "isBotWarfare" ] = true;
-		bot thread added();
+		BotBuiltinPrintConsole( "Bot Warfare: IW4x did not create a test client. Check sv_maxclients and available client slots." );
+		return false;
 	}
+	
+	bot.pers[ "isBot" ] = true;
+	bot.pers[ "isBotWarfare" ] = true;
+	bot thread added();
+	
+	return true;
 }
 
 /*
@@ -1089,10 +1094,35 @@ addBots_loop()
 			botsToAdd = 64;
 		}
 		
+		// IW4x has a hard limit of 18 client slots. Do not call addtestclient()
+		// when all server slots are already occupied.
+		maxClients = getdvarint( "sv_maxclients" );
+		
+		if ( maxClients > 0 )
+		{
+			availableSlots = maxClients - level.players.size;
+			
+			if ( availableSlots < 0 )
+			{
+				availableSlots = 0;
+			}
+			
+			if ( botsToAdd > availableSlots )
+			{
+				BotBuiltinPrintConsole( "Bot Warfare: requested " + botsToAdd + " bots, but only " + availableSlots + " client slots are free (sv_maxclients " + maxClients + ")." );
+				botsToAdd = availableSlots;
+			}
+		}
+		
 		for ( ; botsToAdd > 0; botsToAdd-- )
 		{
-			level add_bot();
-			wait 0.25;
+			if ( !( level add_bot() ) )
+			{
+				break;
+			}
+			
+			// Reserve a client slot for this bot while IW4x completes the connection.
+			wait 0.5;
 		}
 	}
 	
