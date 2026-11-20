@@ -789,7 +789,7 @@ watchC4Thrown( c4 )
 */
 doBotMovement_loop( data )
 {
-	if ( !isdefined( self.bot.moveto ) )
+	if ( !isdefined( self.bot.moveto ) || !isdefined( self.bot.moveto[ 0 ] ) || !isdefined( self.bot.moveto[ 1 ] ) || !isdefined( self.bot.moveto[ 2 ] ) )
 	{
 		self.bot.moveto = self.origin;
 		self botWarnInvalidMoveTo();
@@ -3223,7 +3223,7 @@ prone()
 */
 botSetMoveTo( where )
 {
-	if ( !isdefined( where ) )
+	if ( !isdefined( where ) || !isdefined( where[ 0 ] ) || !isdefined( where[ 1 ] ) || !isdefined( where[ 2 ] ) )
 	{
 		where = self.origin;
 		self botWarnInvalidMoveTo();
