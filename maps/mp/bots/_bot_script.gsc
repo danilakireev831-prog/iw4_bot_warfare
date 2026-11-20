@@ -1146,12 +1146,19 @@ onDamage( eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoin
 		return;
 	}
 	
-	if ( sMeansOfDeath == "MOD_FALLING" || sMeansOfDeath == "MOD_SUICIDE" )
+	// Some IW4x damage callbacks may not provide a numeric damage value.
+	// Do not compare an undefined script value with an integer.
+	if ( !isdefined( iDamage ) || iDamage <= 0 )
 	{
 		return;
 	}
 	
-	if ( iDamage <= 0 )
+	if ( !isdefined( sMeansOfDeath ) )
+	{
+		return;
+	}
+	
+	if ( sMeansOfDeath == "MOD_FALLING" || sMeansOfDeath == "MOD_SUICIDE" )
 	{
 		return;
 	}
