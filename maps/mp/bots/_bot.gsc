@@ -1116,7 +1116,9 @@ addBots_loop()
 		
 		for ( ; botsToAdd > 0; botsToAdd-- )
 		{
-			if ( !( level add_bot() ) )
+			addedBot = level add_bot();
+			
+			if ( !addedBot )
 			{
 				break;
 			}
