@@ -1084,20 +1084,21 @@ setKillstreaks()
 */
 onKilled( eInflictor, eAttacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, timeOffset, deathAnimDuration )
 {
-	self.killerlocation = undefined;
-	self.lastkiller = undefined;
-	
 	if ( !isdefined( self ) || !isdefined( self.team ) )
 	{
 		return;
 	}
 	
-	if ( sMeansOfDeath == "MOD_FALLING" || sMeansOfDeath == "MOD_SUICIDE" )
+	self.killerlocation = undefined;
+	self.lastkiller = undefined;
+	
+	// Validate callback arguments before comparing or using them.
+	if ( !isdefined( iDamage ) || iDamage <= 0 || !isdefined( sMeansOfDeath ) )
 	{
 		return;
 	}
 	
-	if ( iDamage <= 0 )
+	if ( sMeansOfDeath == "MOD_FALLING" || sMeansOfDeath == "MOD_SUICIDE" )
 	{
 		return;
 	}
