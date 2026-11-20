@@ -221,10 +221,14 @@ doHostCheck()
 */
 is_bot()
 {
-	assert( isdefined( self ) );
-	assert( isplayer( self ) );
+	if ( !isdefined( self ) || !isplayer( self ) )
+	{
+		return false;
+	}
 	
-	return ( ( isdefined( self.pers[ "isBot" ] ) && self.pers[ "isBot" ] ) || ( isdefined( self.pers[ "isBotWarfare" ] ) && self.pers[ "isBotWarfare" ] ) || issubstr( self getguid() + "", "bot" ) );
+	// IW4x bots are test clients. Use the native engine check instead of
+	// reading pers fields / GUIDs from a script entity during callbacks.
+	return self IsTestClient();
 }
 
 /*
