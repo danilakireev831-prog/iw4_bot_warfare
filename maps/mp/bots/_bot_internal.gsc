@@ -789,6 +789,12 @@ watchC4Thrown( c4 )
 */
 doBotMovement_loop( data )
 {
+	if ( !isdefined( self.bot.moveto ) )
+	{
+		self.bot.moveto = self.origin;
+		self botWarnInvalidMoveTo();
+	}
+	
 	move_To = self.bot.moveto;
 	angles = self getplayerangles();
 	dir = ( 0, 0, 0 );
@@ -3217,7 +3223,27 @@ prone()
 */
 botSetMoveTo( where )
 {
+	if ( !isdefined( where ) )
+	{
+		where = self.origin;
+		self botWarnInvalidMoveTo();
+	}
+	
 	self.bot.moveto = where;
+}
+
+/*
+	Logs once when a bot receives an invalid movement target.
+*/
+botWarnInvalidMoveTo()
+{
+	if ( isdefined( self.bot.move_to_guard_reported ) )
+	{
+		return;
+	}
+	
+	self.bot.move_to_guard_reported = true;
+	BotBuiltinPrintConsole( "Bot Warfare: ignored undefined movement target for " + self.name );
 }
 
 /*
